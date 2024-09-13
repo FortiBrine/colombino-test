@@ -1,0 +1,7 @@
+cuboid-region:
+  world: "world"
+  point-1: "10;100;10"
+  point-2: "-10;50;-10"
+
+apply-effects:
+  - "REGENERATION;1"

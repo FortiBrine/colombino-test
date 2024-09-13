@@ -1,11 +1,11 @@
 [versions]
-spigot = "1.20.4-R0.1-SNAPSHOT"
+paper = "1.20.4-R0.1-SNAPSHOT"
 shadow = "8.3.1"
 lombok = "1.18.34"
 jetbrains-annotations = "24.1.0"
 
 [libraries]
-spigot = { module = "org.spigotmc:spigot-api", version.ref = "spigot" }
+paper = { module = "io.papermc.paper:paper-api", version.ref = "paper" }
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
 jetbrains-annotations = { module = "org.jetbrains:annotations", version.ref = "jetbrains-annotations" }
 

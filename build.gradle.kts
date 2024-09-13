@@ -9,8 +9,7 @@ allprojects {
     repositories {
         mavenCentral()
 
-        maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
-        maven("https://oss.sonatype.org/content/repositories/snapshots")
+        maven("https://repo.papermc.io/repository/maven-public/")
     }
 }
 
@@ -30,7 +29,7 @@ subprojects {
     dependencies {
         val libs = rootProject.libs
 
-        compileOnly(libs.spigot)
+        compileOnly(libs.paper)
 
         compileOnly(libs.lombok)
         annotationProcessor(libs.lombok)

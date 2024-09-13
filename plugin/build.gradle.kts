@@ -9,6 +9,7 @@ dependencies {
 
 tasks {
     shadowJar {
+        archiveBaseName.set("Regions")
         archiveClassifier.set("")
     }
 }

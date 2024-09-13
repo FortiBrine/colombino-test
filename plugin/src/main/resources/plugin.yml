@@ -1,3 +1,23 @@
 name: Regions
 main: me.fortibrine.regions.RegionsPlugin
 version: 1.0
+
+authors: [FortiBrine]
+api-version: "1.13"
+
+commands:
+  colombinotest:
+    usage: "/colombinotest reload"
+    description: "Reload plugin"
+
+permissions:
+  colombinotest.*:
+    children:
+      - colombinotest.reload
+      - colombinotest.enter-region
+  colombinotest.reload:
+    description: "Reload permission"
+    default: op
+  colombinotest.enter-region:
+    description: "Join region permission"
+    default: op

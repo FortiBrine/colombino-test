@@ -1,5 +1,7 @@
-package me.fortibrine.regions.api.region;
+package me.fortibrine.regions.api.region.manager;
 
+import me.fortibrine.regions.api.region.Region;
+import me.fortibrine.regions.api.region.impl.CuboidRegion;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -7,18 +9,29 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class RegionManager {
 
-    private final List<CuboidRegion> cuboidRegions = new ArrayList<>();
+    private final Map<String, Region> cuboidRegions = new HashMap<>();
 
-    RegionManager() {
+    public RegionManager() {
 
     }
 
-    public @Nullable CuboidRegion createRegion(@NotNull ConfigurationSection section) {
+    public @Nullable Region getRegion(@NotNull Location location) {
+        for (Region region : cuboidRegions.values()) {
+            if (region.contains(location)) {
+                return region;
+            }
+        }
+
+        return null;
+    }
+
+    public @Nullable Region createCuboidRegion(@NotNull ConfigurationSection section) {
         try {
 
             String world = section.getString("world");
@@ -49,13 +62,13 @@ public class RegionManager {
                     Double.parseDouble(point2.split(";")[2])
             );
 
-            CuboidRegion cuboidRegion = new CuboidRegion(
+            Region cuboidRegion = new CuboidRegion(
                     bukkitWorld,
                     startPosition,
                     endPosition
             );
 
-            cuboidRegions.add(cuboidRegion);
+            cuboidRegions.put(UUID.randomUUID().toString(), cuboidRegion);
 
             return cuboidRegion;
         } catch (Exception e) {
