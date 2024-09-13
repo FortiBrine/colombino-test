@@ -17,8 +17,8 @@ public class RegionManager {
 
     private final Map<String, Region> cuboidRegions = new HashMap<>();
 
-    public RegionManager() {
-
+    public void clearRegions() {
+        cuboidRegions.clear();
     }
 
     public @Nullable Region getRegion(@NotNull Location location) {

@@ -1,10 +1,8 @@
 package me.fortibrine.regions;
 
-import lombok.Getter;
 import me.fortibrine.regions.api.RegionsApi;
 import me.fortibrine.regions.api.region.Region;
 import me.fortibrine.regions.commands.ColombinotestCommand;
-import me.fortibrine.regions.config.MainConfig;
 import me.fortibrine.regions.listener.CrossRegionListener;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -16,13 +14,10 @@ public class RegionsPlugin extends JavaPlugin {
 
     private RegionsApi regionsApi;
 
-    @Getter
-    private MainConfig mainConfig;
-
     @Override
     public void onEnable() {
         regionsApi = new RegionsApi(this);
-        mainConfig = new MainConfig(this);
+        saveDefaultConfig();
 
         this.initializeRegions();
         this.initializeCommands();
@@ -30,7 +25,10 @@ public class RegionsPlugin extends JavaPlugin {
     }
 
     private void initializeRegions() {
-        ConfigurationSection mainRegion = mainConfig.getConfig().getConfigurationSection("cuboid-region");
+
+        regionsApi.getRegionManager().clearRegions();
+
+        ConfigurationSection mainRegion = getConfig().getConfigurationSection("cuboid-region");
 
         if (mainRegion == null) {
             getLogger().warning("Main config wrong");
@@ -50,7 +48,7 @@ public class RegionsPlugin extends JavaPlugin {
 
     private void initializeCommands() {
         Map.of(
-                "colombinotest", new ColombinotestCommand(mainConfig)
+                "colombinotest", new ColombinotestCommand(this)
         ).forEach((key, value) -> {
             getCommand(key).setExecutor(value);
         });
@@ -62,6 +60,12 @@ public class RegionsPlugin extends JavaPlugin {
         ).forEach(listener -> {
             getServer().getPluginManager().registerEvents(listener, this);
         });
+    }
+
+    @Override
+    public void reloadConfig() {
+        super.reloadConfig();
+        this.initializeRegions();
     }
 
 }
