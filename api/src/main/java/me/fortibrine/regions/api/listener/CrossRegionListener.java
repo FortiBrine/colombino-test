@@ -1,5 +1,7 @@
 package me.fortibrine.regions.api.listener;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import lombok.RequiredArgsConstructor;
 import me.fortibrine.regions.api.event.RegionCrossEvent;
 import org.bukkit.Location;
@@ -9,14 +11,15 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
 public class CrossRegionListener implements Listener {
 
-    private final Map<UUID, Long> cooldown = new HashMap<>();
+    private final Cache<UUID, Boolean> inCooldown = CacheBuilder.newBuilder()
+            .expireAfterAccess(3, TimeUnit.SECONDS)
+            .build();
     private final Plugin plugin;
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -26,7 +29,7 @@ public class CrossRegionListener implements Listener {
         Location from = event.getFrom();
         Location to = event.getTo();
 
-        if (cooldown.getOrDefault(player.getUniqueId(), 0L) < System.currentTimeMillis()) {
+        if (Boolean.TRUE.equals(inCooldown.getIfPresent(player.getUniqueId()))) {
 
             String world = from.getWorld().getName();
 
@@ -40,8 +43,9 @@ public class CrossRegionListener implements Listener {
                     .append(")")
                     .toString());
 
-            cooldown.put(player.getUniqueId(), System.currentTimeMillis() + 3000L);
+            inCooldown.put(player.getUniqueId(), true);
         }
+
     }
 
 }
